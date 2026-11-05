@@ -1,9 +1,10 @@
-import artwork from "@/assets/subzero-logo.png.asset.json";
+// Logo empacotado no próprio site para funcionar em qualquer hospedagem (ex.: Netlify).
+import artwork from "@/assets/subzero-logo.png";
 import icon from "@/assets/subzero-icon.png";
 
 /** Identidade pública: nunca inclua credenciais neste módulo. */
 export const STORE_NAME = "Subzero Delivery";
-export const STORE_ARTWORK = artwork.url;
+export const STORE_ARTWORK = artwork;
 export const STORE_ICON = icon;
 
 export function brandMeta(page: string, description: string) {
