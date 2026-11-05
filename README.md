@@ -17,7 +17,7 @@ Este aplicativo foi projetado para simplificar o controle de estoque e a consult
 | :---: | :---: | :---: |
 | <img src="https://via.placeholder.com/300x600?text=Dashboard" width="200"> | <img src="https://via.placeholder.com/300x600?text=Catalogo" width="200"> | <img src="https://via.placeholder.com/300x600?text=Estoque" width="200"> |
 
-> *Dica: Substitua os links das imagens acima pelos screenshots reais do aplicativo da adega hospedados no GitHub.*
+> *em manutenção das imagens para demonstração*
 
 ---
 
