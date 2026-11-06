@@ -53,7 +53,13 @@ function AuthPage() {
     setLoading(true);
     try {
       // 1. Rate limit no servidor
-      const guard = await canTryLogin({ data: { email } });
+      // Se a hospedagem não roda funções de servidor (ex.: Netlify estático),
+      // seguimos sem o limitador em vez de travar o login.
+      const guard = await canTryLogin({ data: { email } }).catch(() => ({
+        allowed: true,
+        remaining: 5,
+        blockedForMinutes: 15,
+      }));
       if (!guard.allowed) {
         toast.error("Muitas tentativas", {
           description: `Aguarde ${guard.blockedForMinutes} minutos antes de tentar novamente.`,
@@ -63,11 +69,14 @@ function AuthPage() {
 
       // 2. Tentativa de login
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      await logAttempt({ data: { email, success: !error } });
+      await logAttempt({ data: { email, success: !error } }).catch(() => undefined);
 
       if (error) {
+        const notConfirmed = /confirm/i.test(error.message);
         toast.error("Falha no login", {
-          description: `Credenciais inválidas. Tentativas restantes: ${Math.max(0, guard.remaining - 1)}.`,
+          description: notConfirmed
+            ? "E-mail ainda não confirmado. Abra o link enviado ao seu e-mail."
+            : `Credenciais inválidas. Tentativas restantes: ${Math.max(0, guard.remaining - 1)}.`,
         });
         return;
       }
@@ -89,7 +98,7 @@ function AuthPage() {
     });
     setLoading(false);
     if (error) return toast.error("Falha no cadastro", { description: error.message });
-    toast.success("Conta criada! Faça login.");
+    toast.success("Conta criada!", { description: "Confirme pelo link enviado ao seu e-mail e depois faça login." });
   };
 
   const handleClaimAdmin = async () => {
